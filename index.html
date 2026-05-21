@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0A0A0F">
+<title>Claudy</title>
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ LOCK SCREEN -->
+<div id="lock-screen" class="lock-screen">
+  <div class="lock-bg-orb orb1"></div>
+  <div class="lock-bg-orb orb2"></div>
+  <div class="lock-bg-orb orb3"></div>
+  <div class="lock-content">
+    <div class="lock-logo">
+      <div class="lock-avatar">
+        <span class="lock-avatar-letter">C</span>
+        <div class="lock-avatar-ring"></div>
+      </div>
+      <h1 class="lock-name">Claudy</h1>
+      <p class="lock-sub">Tu asistente personal de vida</p>
+    </div>
+    <div class="lock-form">
+      <div class="pin-dots" id="pin-dots">
+        <div class="pin-dot" id="d0"></div>
+        <div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div>
+        <div class="pin-dot" id="d3"></div>
+      </div>
+      <p class="pin-hint" id="pin-hint">Ingresa tu PIN de 4 dígitos</p>
+      <div class="numpad">
+        <button class="num-btn" onclick="pinInput('1')">1</button>
+        <button class="num-btn" onclick="pinInput('2')">2</button>
+        <button class="num-btn" onclick="pinInput('3')">3</button>
+        <button class="num-btn" onclick="pinInput('4')">4</button>
+        <button class="num-btn" onclick="pinInput('5')">5</button>
+        <button class="num-btn" onclick="pinInput('6')">6</button>
+        <button class="num-btn" onclick="pinInput('7')">7</button>
+        <button class="num-btn" onclick="pinInput('8')">8</button>
+        <button class="num-btn" onclick="pinInput('9')">9</button>
+        <button class="num-btn num-bio" onclick="pinBio()"><i class="ti ti-fingerprint"></i></button>
+        <button class="num-btn" onclick="pinInput('0')">0</button>
+        <button class="num-btn num-del" onclick="pinDel()"><i class="ti ti-backspace"></i></button>
+      </div>
+    </div>
+    <p class="lock-footer">Primera vez: ingresa 1234 para configurar tu PIN</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ APP -->
+<div id="app" class="app hidden">
+
+  <!-- URGENT MODAL -->
+  <div class="urgent-overlay hidden" id="urgent-overlay">
+    <div class="urgent-modal" id="urgent-modal">
+      <div class="urgent-header">
+        <div class="urgent-icon-wrap"><i class="ti ti-alert-triangle"></i></div>
+        <h2>Atención, necesitas revisar esto</h2>
+        <p id="urgent-subtitle"></p>
+      </div>
+      <div class="urgent-list" id="urgent-list"></div>
+      <button class="urgent-dismiss" onclick="dismissUrgent()">Entendido, vamos</button>
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="avatar-sm">C</div>
+      <div>
+        <p class="greeting" id="greeting">Buenos días</p>
+        <p class="topbar-date" id="topbar-date"></p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="notif-btn" onclick="toggleNotifs()">
+        <i class="ti ti-bell"></i>
+        <span class="notif-badge hidden" id="notif-badge">0</span>
+      </button>
+      <button class="icon-btn" onclick="openSettings()"><i class="ti ti-settings"></i></button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="main-content">
+
+    <!-- ─── HOME ─── -->
+    <section class="view active" id="view-home">
+      <!-- XP Bar -->
+      <div class="xp-row">
+        <div class="xp-left">
+          <span class="xp-level" id="xp-level">Nv. 1</span>
+          <span class="xp-label">Crecimiento personal</span>
+        </div>
+        <span class="xp-pts" id="xp-pts">0 XP</span>
+      </div>
+      <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+
+      <!-- Claudy Message -->
+      <div class="claudy-card" id="claudy-card">
+        <div class="claudy-avatar">C</div>
+        <div class="claudy-bubble">
+          <p class="claudy-msg" id="claudy-msg">Cargando tu resumen...</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="quick-stats">
+        <div class="qs-card qs-blue">
+          <i class="ti ti-check"></i>
+          <div class="qs-val" id="qs-done">0</div>
+          <div class="qs-lbl">Completadas</div>
+        </div>
+        <div class="qs-card qs-amber">
+          <i class="ti ti-clock"></i>
+          <div class="qs-val" id="qs-pending">0</div>
+          <div class="qs-lbl">Pendientes</div>
+        </div>
+        <div class="qs-card qs-green">
+          <i class="ti ti-flame"></i>
+          <div class="qs-val" id="qs-streak">0</div>
+          <div class="qs-lbl">Racha días</div>
+        </div>
+        <div class="qs-card qs-purple">
+          <i class="ti ti-target"></i>
+          <div class="qs-val" id="qs-goals">0%</div>
+          <div class="qs-lbl">Metas</div>
+        </div>
+      </div>
+
+      <!-- Progress Ring Row -->
+      <div class="rings-row">
+        <div class="ring-card" onclick="showTab('salud')">
+          <canvas id="ring-health" width="80" height="80"></canvas>
+          <div class="ring-label">Salud</div>
+          <div class="ring-pct" id="rpct-health">—</div>
+        </div>
+        <div class="ring-card" onclick="showTab('tareas')">
+          <canvas id="ring-tasks" width="80" height="80"></canvas>
+          <div class="ring-label">Tareas</div>
+          <div class="ring-pct" id="rpct-tasks">—</div>
+        </div>
+        <div class="ring-card" onclick="showTab('habitos')">
+          <canvas id="ring-habits" width="80" height="80"></canvas>
+          <div class="ring-label">Hábitos</div>
+          <div class="ring-pct" id="rpct-habits">—</div>
+        </div>
+        <div class="ring-card" onclick="showTab('metas')">
+          <canvas id="ring-goals" width="80" height="80"></canvas>
+          <div class="ring-label">Metas</div>
+          <div class="ring-pct" id="rpct-goals">—</div>
+        </div>
+      </div>
+
+      <!-- Today's Schedule -->
+      <div class="section-hdr"><span>Hoy en tu agenda</span><button class="see-all" onclick="showTab('horario')">Ver todo</button></div>
+      <div id="home-schedule"></div>
+
+      <!-- Top Tasks -->
+      <div class="section-hdr" style="margin-top:8px"><span>Tareas prioritarias</span><button class="see-all" onclick="showTab('tareas')">Ver todo</button></div>
+      <div id="home-tasks"></div>
+
+      <!-- Weekly Chart -->
+      <div class="section-hdr" style="margin-top:8px"><span>Actividad semanal</span></div>
+      <div class="chart-card">
+        <canvas id="weekly-chart" height="120"></canvas>
+      </div>
+
+      <!-- Records -->
+      <div class="section-hdr" style="margin-top:8px"><span>Tus récords</span></div>
+      <div class="records-row" id="records-row"></div>
+    </section>
+
+    <!-- ─── TAREAS ─── -->
+    <section class="view" id="view-tareas">
+      <div class="view-search">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Buscar tareas..." id="task-search" oninput="filterTasks()">
+      </div>
+      <div class="filter-chips" id="filter-chips"></div>
+      <div class="fab-area">
+        <div class="task-list-full" id="task-list-full"></div>
+      </div>
+    </section>
+
+    <!-- ─── HORARIO ─── -->
+    <section class="view" id="view-horario">
+      <div class="day-scroller" id="day-scroller"></div>
+      <div class="timeline-full" id="timeline-full"></div>
+    </section>
+
+    <!-- ─── SALUD ─── -->
+    <section class="view" id="view-salud">
+      <div class="health-hero">
+        <div class="health-score-ring">
+          <canvas id="health-main-ring" width="140" height="140"></canvas>
+          <div class="health-score-label">
+            <div class="health-score-val" id="health-score-val">0</div>
+            <div class="health-score-sub">Score de salud</div>
+          </div>
+        </div>
+      </div>
+      <div class="health-metrics-grid" id="health-metrics-grid"></div>
+      <div class="section-hdr" style="margin-top:4px"><span>Registro rápido</span></div>
+      <div class="health-log-form" id="health-log-form"></div>
+      <div class="section-hdr" style="margin-top:4px"><span>Déficits detectados</span></div>
+      <div class="deficit-list" id="deficit-list"></div>
+      <div class="section-hdr" style="margin-top:4px"><span>Historial semanal</span></div>
+      <div class="chart-card"><canvas id="health-chart" height="130"></canvas></div>
+    </section>
+
+    <!-- ─── HÁBITOS ─── -->
+    <section class="view" id="view-habitos">
+      <div class="habit-streak-hero">
+        <div class="streak-number" id="habit-streak-big">0</div>
+        <div class="streak-label">días de racha máxima</div>
+        <div class="streak-sub" id="habit-today-rate">0 de 0 hábitos hoy</div>
+      </div>
+      <div class="habit-heatmap" id="habit-heatmap"></div>
+      <div class="section-hdr"><span>Hábitos diarios</span><button class="see-all" onclick="openAddHabit()">+ Agregar</button></div>
+      <div class="habit-list" id="habit-list"></div>
+    </section>
+
+    <!-- ─── METAS ─── -->
+    <section class="view" id="view-metas">
+      <div class="goals-summary">
+        <div class="goal-sum-card">
+          <div class="gsval" id="g-active">0</div><div class="gslbl">Activas</div>
+        </div>
+        <div class="goal-sum-card">
+          <div class="gsval" id="g-done">0</div><div class="gslbl">Logradas</div>
+        </div>
+        <div class="goal-sum-card">
+          <div class="gsval" id="g-pct">0%</div><div class="gslbl">Progreso</div>
+        </div>
+      </div>
+      <div class="section-hdr"><span>Mis metas</span><button class="see-all" onclick="openAddGoal()">+ Nueva</button></div>
+      <div class="goals-list" id="goals-list"></div>
+      <div class="section-hdr" style="margin-top:8px"><span>Motivación del día</span></div>
+      <div class="motivation-card" id="motivation-card"></div>
+    </section>
+
+    <!-- ─── STATS ─── -->
+    <section class="view" id="view-stats">
+      <div class="stats-hero">
+        <h2 class="stats-title">Tu crecimiento</h2>
+        <p class="stats-sub">Resumen completo de tu progreso</p>
+      </div>
+      <div class="stat-blocks" id="stat-blocks"></div>
+      <div class="section-hdr" style="margin-top:4px"><span>Distribución de tiempo</span></div>
+      <div class="chart-card"><canvas id="pie-chart" height="160"></canvas></div>
+      <div class="section-hdr" style="margin-top:4px"><span>Progreso mensual</span></div>
+      <div class="chart-card"><canvas id="monthly-chart" height="130"></canvas></div>
+      <div class="section-hdr" style="margin-top:4px"><span>Logros desbloqueados</span></div>
+      <div class="achievements-grid" id="achievements-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="showTab('home')" data-tab="home">
+      <i class="ti ti-home"></i><span>Inicio</span>
+    </button>
+    <button class="nav-item" onclick="showTab('tareas')" data-tab="tareas">
+      <i class="ti ti-checkbox"></i><span>Tareas</span>
+    </button>
+    <button class="nav-item" onclick="showTab('horario')" data-tab="horario">
+      <i class="ti ti-calendar-week"></i><span>Horario</span>
+    </button>
+    <button class="nav-item" onclick="showTab('salud')" data-tab="salud">
+      <i class="ti ti-heart-rate-monitor"></i><span>Salud</span>
+    </button>
+    <button class="nav-item" onclick="showTab('habitos')" data-tab="habitos">
+      <i class="ti ti-repeat"></i><span>Hábitos</span>
+    </button>
+    <button class="nav-item" onclick="showTab('metas')" data-tab="metas">
+      <i class="ti ti-target"></i><span>Metas</span>
+    </button>
+    <button class="nav-item" onclick="showTab('stats')" data-tab="stats">
+      <i class="ti ti-chart-bar"></i><span>Stats</span>
+    </button>
+  </nav>
+
+  <!-- FAB -->
+  <button class="fab" id="fab" onclick="openQuickAdd()"><i class="ti ti-plus"></i></button>
+
+  <!-- MODALS -->
+  <div class="modal-overlay hidden" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal-sheet" id="modal-sheet"></div>
+  </div>
+
+  <!-- ACTION SHEET -->
+  <div class="modal-overlay hidden" id="sheet-overlay" onclick="if(event.target===this)closeSheet()">
+    <div class="action-sheet-wrap" id="action-sheet-wrap"></div>
+  </div>
+
+  <!-- NOTIF PANEL -->
+  <div class="notif-panel hidden" id="notif-panel">
+    <div class="notif-header"><h3>Notificaciones</h3><button onclick="toggleNotifs()"><i class="ti ti-x"></i></button></div>
+    <div class="notif-list" id="notif-list"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="settings-panel hidden" id="settings-panel">
+    <div class="settings-header">
+      <button onclick="closeSettings()"><i class="ti ti-arrow-left"></i></button>
+      <h3>Configuración</h3>
+    </div>
+    <div class="settings-body" id="settings-body"></div>
+  </div>
+
+  <!-- SNACKBAR -->
+  <div class="snackbar" id="snackbar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/security.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/health.js"></script>
+<script src="js/habits.js"></script>
+<script src="js/goals.js"></script>
+<script src="js/schedule.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

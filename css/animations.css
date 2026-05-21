@@ -1,0 +1,39 @@
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(20px,-20px) scale(1.05)}66%{transform:translate(-10px,15px) scale(0.95)}}
+@keyframes ringPulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:0.2;transform:scale(1.08)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes countUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes barFill{from{width:0}to{width:var(--target-w)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 8px rgba(124,110,245,0.3)}50%{box-shadow:0 0 20px rgba(124,110,245,0.6)}}
+@keyframes confetti{0%{transform:translateY(-100%) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes bounceIn{0%{transform:scale(0.3);opacity:0}50%{transform:scale(1.05)}70%{transform:scale(0.9)}100%{transform:scale(1);opacity:1}}
+@keyframes typing{0%,100%{opacity:0}50%{opacity:1}}
+
+.animate-pop{animation:pop 0.3s ease}
+.animate-fade{animation:fadeIn 0.25s ease}
+.animate-bounce{animation:bounceIn 0.5s cubic-bezier(0.36,0.07,0.19,0.97)}
+.pulse-dot{animation:glowPulse 2s ease-in-out infinite}
+.typing-dot{animation:typing 1.2s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;z-index:9999;border-radius:2px;animation:confetti 3s ease-in forwards;pointer-events:none}
+
+.ring-anim{transition:stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)}
+.xp-anim{transition:width 1.5s cubic-bezier(0.4,0,0.2,1)}
+
+.view{animation:fadeIn 0.2s ease}
+.task-card{animation:fadeIn 0.15s ease}
+.habit-card{animation:fadeIn 0.15s ease}
+.goal-card{animation:fadeIn 0.15s ease}
+
+.stagger-1{animation-delay:0.05s}
+.stagger-2{animation-delay:0.1s}
+.stagger-3{animation-delay:0.15s}
+.stagger-4{animation-delay:0.2s}
+.stagger-5{animation-delay:0.25s}
